@@ -1,0 +1,18 @@
+#root {
+  text-align: center;
+  width: 100%;
+  overflow: scroll;
+  background-color: #494440;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  /* justify-content: center;  */
+  font-size: cal(10px + 2vmin);
+  color: #ffffff;
+  font: impact;
+}
+
+img {
+  max-width: 80%;
+}
