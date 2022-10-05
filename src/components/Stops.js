@@ -3,18 +3,15 @@ import axios from "axios";
 import ArrivalList from "./Arrivals";
 import "./stops.css";
 
-// class components
-// functional components -- hooks
-
-// Fully controlled components - supply both the value and the change function
-const Dropdown = ({ informationBeforeDropdown, trainData, onChange, value }) => {
+const Dropdown = ({ informationBeforeDropdown, options, onChange, value }) => {
+  // console.log("opts", options);
   return (
     <label>
       {informationBeforeDropdown}
       <select onChange={onChange} value={value}>
-        {trainData.map((train) => (
-          <option key={Math.random()} value={train.id}>
-            {train.name}
+        {options.map((opt) => (
+          <option key={Math.random()} value={opt.value}>
+            {opt.label}
           </option>
         ))}
       </select>
@@ -28,25 +25,21 @@ const StopList = () => {
   const [stop, setStop] = useState(null);
   const [line, setLine] = useState(null);
 
-  // Below is an effect hook to be utilized with functional compontents
   useEffect(() => {
-    //call controller
-    axios.get(`http://localhost:3000/stops`).then((res) => {
-      const stops = res.data;
-      setStops(stops);
-      console.log(stops);
-      axios.get(`http://localhost:3000/lines`).then((res) => {
-        const lines = res.data;
-        setLines(lines);
-        console.log(lines);
-      });
+    axios.get(`http://localhost:8080/lines`).then((res) => {
+      const lines = res.data;
+      setLines(lines);
+      console.log(lines);
+      // axios.get(`http://localhost:8080/stops`).then((res) => {
+  //       const stops = res.data;
+  //       setStops(stops);
+  //       console.log(stops);
+  //     });
     });
   }, []);
 
   const handleChange = (event) => {
-    const lineId = parseInt(event.target.value);
-    const newLine = lines.find((item) => item.id === lineId);
-    setLine(newLine);
+    setLine(event.target.value);
   };
 
   const handleStopChange = (event) => {
@@ -63,23 +56,26 @@ const StopList = () => {
       <Dropdown
         informationBeforeDropdown="CTA Train Line"
         onChange={handleChange}
-        trainData={lines}
-        value={line ? line.id : ""}
+        options={lines.map((line) => {
+          return { label: line, value: line };
+        })}
+        value={line}
       />
       <Dropdown
         informationBeforeDropdown="Train Stop"
         onChange={handleStopChange}
-        trainData={stops}
-        value={stop ? stop.id : ""}
+        options={stops.map((stops) => {
+          return { label: stops, value: stops };
+        })}
+        // options={[]}
+        // value={stop ? stop.id : ""}
       />
-      <p></p>
+      <p></p> 
       <b>Please select a train line and stop</b>
       <b>{stop && <p>This stop is {stop.is_accessible ? "accessible" : "not accessible"}</p>}</b>
-      {/* sent down the id as prop into arrival */}
       {stop && <ArrivalList stop={stop} />}
     </div>
   );
 };
 
-//export { AnothComp, AnotherComp1 } ** only one default but multiple ways to export similar to import I used above in import **
 export default StopList;
