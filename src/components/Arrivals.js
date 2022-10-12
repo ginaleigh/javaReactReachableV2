@@ -6,14 +6,13 @@ import Arrival from "./Arrival";
 const ArrivalList = ({ stop }) => {
   const [arrivalTimes, setArrivalTimes] = useState([]);
 
-  // dependency array
   useEffect(() => {
-    axios.get(`http://localhost:3000/arrival_times?parent_id=${stop.parent_id}`).then((res) => {
-      const payload = res.data["ctatt"]["eta"];
+    axios.get(`http://localhost:8080/arrivals/${stop.stop_id}`).then((res) => {
+      const payload = res.data;
       setArrivalTimes(payload)
       console.log(payload);
     });
-  }, [stop.parent_id])
+  }, [stop.stop_id])
 
     return (
       <div>
@@ -22,6 +21,7 @@ const ArrivalList = ({ stop }) => {
         ))}
       </div>
     );
+    
 
 }
 
