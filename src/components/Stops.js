@@ -87,6 +87,7 @@ console.log('line', lines)
         }).map((stop) => {
           return { label: stop.stop_name, value: stop.stop_id };
         })}
+        value={stop?.stop_id}
       />
       <p></p>
       <b>Please select a train line and stop</b>
